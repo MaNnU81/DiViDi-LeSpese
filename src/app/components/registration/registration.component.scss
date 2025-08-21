@@ -1,0 +1,38 @@
+.card {
+  max-width: 560px;
+  margin: 24px auto;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.w100 {
+  width: 100%;
+}
+
+.row-center {
+  display: flex;
+  align-items: center;
+}
+
+.ml8 { margin-left: 8px; }
+
+.alert {
+  padding: 12px 14px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  &.info {
+    background: #eaf4ff;
+    border: 1px solid #cfe4ff;
+  }
+  .actions { margin-top: 8px; }
+}
+
+.hint {
+  color: #b23c17;
+  font-size: 12px;
+  margin-top: -8px;
+}

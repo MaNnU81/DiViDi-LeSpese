@@ -1,0 +1,70 @@
+
+<mat-card class="card">
+  <h2>Il mio profilo</h2>
+
+  <!-- Loading -->
+  <div class="center" *ngIf="loading()">
+    <mat-spinner diameter="34"></mat-spinner>
+    <div class="mt8">Caricamento…</div>
+  </div>
+
+  <!-- Non autenticato -->
+  <div *ngIf="!loading() && !fbUser" class="alert warn">
+    <p>Devi effettuare l’accesso per vedere/modificare il profilo.</p>
+  </div>
+
+  <!-- Autenticato -->
+  <form *ngIf="!loading() && fbUser" [formGroup]="form" (ngSubmit)="save()" class="form">
+
+    <div class="grid">
+      <mat-form-field appearance="outline" class="w100">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" readonly>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w100">
+        <mat-label>User ID</mat-label>
+        <input matInput formControlName="userId" readonly>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="w100">
+      <mat-label>Nickname</mat-label>
+      <input matInput formControlName="nickname" maxlength="40" autocomplete="nickname">
+      <mat-hint align="end">{{ form.controls.nickname.value?.length || 0 }}/40</mat-hint>
+      <mat-error *ngIf="form.controls.nickname.hasError('required')">Obbligatorio</mat-error>
+      <mat-error *ngIf="form.controls.nickname.hasError('minlength')">Min 3 caratteri</mat-error>
+    </mat-form-field>
+
+    <div class="grid">
+      <mat-form-field appearance="outline" class="w100">
+        <mat-label>Debiti aperti</mat-label>
+        <input matInput formControlName="debtsOpen" readonly>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w100">
+        <mat-label>Debiti saldati</mat-label>
+        <input matInput formControlName="debtsSettled" readonly>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="w100">
+      <mat-label>Stato</mat-label>
+      <input matInput formControlName="active" readonly>
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" class="w100" type="submit" [disabled]="saving() || form.controls.nickname.invalid">
+      <ng-container *ngIf="!saving(); else savingTpl">Salva modifiche</ng-container>
+    </button>
+    <ng-template #savingTpl>
+      <span class="row-center">
+        <mat-spinner diameter="20"></mat-spinner>
+        <span class="ml8">Salvataggio…</span>
+      </span>
+    </ng-template>
+
+    <button type="button" mat-stroked-button color="warn" class="w100 mt8" (click)="signOutNow()">
+      Esci
+    </button>
+  </form>
+</mat-card>

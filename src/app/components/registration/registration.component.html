@@ -1,1 +1,63 @@
-<p>registration works!</p>
+<mat-card class="card">
+  <h2>Registrazione</h2>
+
+  <!-- Stato: profilo già creato -->
+  <!-- <div *ngIf="loggedIn && profileExists" class="alert info">
+    <p>Hai già un profilo per questo account.</p>
+    <div class="actions">
+      <button mat-stroked-button color="primary" (click)="signOutNow()">Esci per provare con un altro account</button>
+    </div>
+  </div> -->
+
+  <!-- Stato: form registrazione/profilo -->
+  <form *ngIf="!profileExists" [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+
+    <!-- EMAIL -->
+    <mat-form-field appearance="outline" class="w100">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" autocomplete="email" [readonly]="loggedIn">
+      <mat-error *ngIf="form.controls.email.invalid">Email non valida</mat-error>
+    </mat-form-field>
+
+    <!-- PASSWORD SOLO SE NON LOGGATO -->
+    <ng-container *ngIf="!loggedIn">
+      <mat-form-field appearance="outline" class="w100">
+        <mat-label>Password</mat-label>
+        <input matInput formControlName="password" type="password" autocomplete="new-password">
+        <mat-error *ngIf="form.controls.password.hasError('required')">Obbligatoria</mat-error>
+        <mat-error *ngIf="form.controls.password.hasError('minlength')">Min 6 caratteri</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w100">
+        <mat-label>Conferma Password</mat-label>
+        <input matInput formControlName="passwordConfirm" type="password" autocomplete="new-password">
+        <mat-error *ngIf="form.controls.passwordConfirm.hasError('required')">Obbligatoria</mat-error>
+        <mat-error *ngIf="form.controls.passwordConfirm.hasError('minlength')">Min 6 caratteri</mat-error>
+      </mat-form-field>
+
+      <div class="hint" *ngIf="form.value.password && form.value.passwordConfirm && form.value.password !== form.value.passwordConfirm">
+        Le password non coincidono.
+      </div>
+    </ng-container>
+
+    <!-- NICKNAME -->
+    <mat-form-field appearance="outline" class="w100">
+      <mat-label>Nickname</mat-label>
+      <input matInput formControlName="nickname" maxlength="40" autocomplete="nickname" placeholder="Es. Gio">
+      <mat-hint align="end">{{ form.controls.nickname.value?.length || 0 }}/40</mat-hint>
+      <mat-error *ngIf="form.controls.nickname.hasError('required')">Obbligatorio</mat-error>
+      <mat-error *ngIf="form.controls.nickname.hasError('minlength')">Min 3 caratteri</mat-error>
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" class="w100" type="submit" [disabled]="form.invalid || loading()">
+      <ng-container *ngIf="!loading(); else loadingTpl">Crea account</ng-container>
+    </button>
+
+    <ng-template #loadingTpl>
+      <span class="row-center">
+        <mat-spinner diameter="20"></mat-spinner>
+        <span class="ml8">Creazione...</span>
+      </span>
+    </ng-template>
+  </form>
+</mat-card>
