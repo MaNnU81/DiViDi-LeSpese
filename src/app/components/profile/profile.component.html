@@ -1,4 +1,3 @@
-
 <mat-card class="card">
   <h2>Il mio profilo</h2>
 
@@ -16,16 +15,26 @@
   <!-- Autenticato -->
   <form *ngIf="!loading() && fbUser" [formGroup]="form" (ngSubmit)="save()" class="form">
 
+    <!-- Avatar -->
+    <div class="avatar-row">
+      <img class="avatar" [src]="avatarSrc()" alt="Avatar utente">
+      <div class="avatar-actions">
+        <div class="hint">Immagine profilo</div>
+        <button type="button" mat-stroked-button (click)="changeAvatarSoon()">Cambia immagine</button>
+      </div>
+    </div>
+
+    <!-- Dati base -->
     <div class="grid">
       <mat-form-field appearance="outline" class="w100">
         <mat-label>Email</mat-label>
         <input matInput formControlName="email" readonly>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="w100">
+      <!-- <mat-form-field appearance="outline" class="w100">
         <mat-label>User ID</mat-label>
         <input matInput formControlName="userId" readonly>
-      </mat-form-field>
+      </mat-form-field> -->
     </div>
 
     <mat-form-field appearance="outline" class="w100">
@@ -48,10 +57,10 @@
       </mat-form-field>
     </div>
 
-    <mat-form-field appearance="outline" class="w100">
+    <!-- <mat-form-field appearance="outline" class="w100">
       <mat-label>Stato</mat-label>
       <input matInput formControlName="active" readonly>
-    </mat-form-field>
+    </mat-form-field> -->
 
     <button mat-flat-button color="primary" class="w100" type="submit" [disabled]="saving() || form.controls.nickname.invalid">
       <ng-container *ngIf="!saving(); else savingTpl">Salva modifiche</ng-container>

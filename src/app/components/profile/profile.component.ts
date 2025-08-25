@@ -48,10 +48,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
   sub?: Subscription;
   unlistenAuth?: () => void;
 
+  readonly defaultAvatar = '/img/default-avatar.png';
+
   form = this.fb.group({
     email: [{ value: '', disabled: true }],
-    userId: [{ value: '', disabled: true }],
+    // userId: [{ value: '', disabled: true }],
     nickname: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
+    avatarUrl: [{ value: '', disabled: true }], // per ora solo visualizzazione
     debtsOpen: [{ value: 0, disabled: true }],
     debtsSettled: [{ value: 0, disabled: true }],
     active: [{ value: true, disabled: true }]
@@ -70,15 +73,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
         return;
       }
 
-      // Sottoscrivi il profilo in realtime
       this.sub = this.userService.getUserById(user.uid).subscribe({
         next: (u) => {
           this.profile = u;
-          // Popola form (anche se u è null)
           this.form.patchValue({
             email: u?.email ?? user.email ?? '',
-            userId: u?.userId ?? user.uid,
+            // userId: u?.userId ?? user.uid,
             nickname: u?.nickname ?? '',
+            avatarUrl: u?.avatarUrl ?? this.defaultAvatar,
             debtsOpen: u?.debtsOpen ?? 0,
             debtsSettled: u?.debtsSettled ?? 0,
             active: u?.active ?? false
@@ -121,11 +123,21 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Placeholder per futuro upload avatar
+  changeAvatarSoon() {
+    this.snack.open('Upload immagine profilo in arrivo 😉', 'OK', { duration: 2500 });
+  }
+
   async signOutNow() {
     const auth = getAuth(this.firebase.app);
     await signOut(auth);
     this.snack.open('Sei uscito.', 'OK', { duration: 2000 });
     this.form.reset();
     this.profile = null;
+  }
+
+  avatarSrc(): string {
+    const v = this.form.controls.avatarUrl.value;
+    return v && v.length > 0 ? v : this.defaultAvatar;
   }
 }

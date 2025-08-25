@@ -153,7 +153,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         debtsOpen: 0,
         debtsSettled: 0,
         active: true,
-        createdAt: undefined as any // viene impostato dal service con serverTimestamp()
+        createdAt: undefined as any, // viene impostato dal service con serverTimestamp()
+        avatarUrl: '/img/default-avatar.png'
       };
 
       await this.userService.createUser(appUser);
